@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: awx
+  namespace: awx
+  annotations:
+    cert-manager.io/cluster-issuer: ... # ingress.certResolver
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+      - awx.example.com
+      secretName: awx-tls
+  rules:
+    - host: awx.example.com
+      http:
+        paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: awx-ansible-service
+              port:
+                number: 80
